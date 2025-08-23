@@ -104,7 +104,9 @@ You can find the docs at http://localhost:5555/docs
 ### To Enable JWT AUTH:
 
 Enable token checking at all endpoints (router = APIRouter(dependencies=[Depends(require_auth())]))
+
 Uncomment line 18 in app/routes.py
+
 Comment out line 16 in app/routespy
 
 Set env variables to local env:
