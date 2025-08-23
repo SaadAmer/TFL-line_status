@@ -104,10 +104,10 @@ You can find the docs at http://localhost:5555/docs
 ### To Enable JWT AUTH:
 
 Enable token checking at all endpoints (router = APIRouter(dependencies=[Depends(require_auth())]))
-uncomment line 18 in app/routes.py
-comment out line 16 in app/routespy
+Uncomment line 18 in app/routes.py
+Comment out line 16 in app/routespy
 
-set env variables to local env:
+Set env variables to local env:
 
 ```bash
 export JWT_SECRET="super-long-random-dev-secret"
@@ -115,7 +115,7 @@ export JWT_ISSUER="wovenlight-dev"
 export JWT_AUD="wovenlight-api"
 ```
 
-add env variable to docker-compose: 
+Add env variable to docker-compose: 
 
 ```bash
 JWT_SECRET=super-long-random-dev-secret
