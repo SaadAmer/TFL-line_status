@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: wovenlight
+      POSTGRES_USER: woven
+      POSTGRES_PASSWORD: wovenpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U woven -d wovenlight"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    command: poetry run uvicorn app.main:app --host 0.0.0.0 --port 5555 --reload
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5555:5555"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=Europe/London
+      - DATABASE_URL=postgresql+psycopg2://woven:wovenpass@db:5432/wovenlight
+      # If you enabled JWT auth:
+      # - JWT_SECRET=super-long-random-dev-secret
+      # - JWT_ISSUER=wovenlight-dev
+      # - JWT_AUD=wovenlight-api
+    volumes:
+      - .:/app
+
+volumes:
+  pgdata:
