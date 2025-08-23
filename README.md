@@ -100,8 +100,8 @@ docker compose up --build
 You can find the docs at http://localhost:5555/docs
 
 
-
-### FOR JWT AUTH:
+## Bonus Optional JWT Auth
+### To Enable JWT AUTH:
 
 Enable token checking at all endpoints (router = APIRouter(dependencies=[Depends(require_auth())]))
 uncomment line 18 in app/routes.py
