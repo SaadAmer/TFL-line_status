@@ -15,10 +15,10 @@ It demonstrates REST API design, background scheduling, database persistence, lo
   - Update task lines or schedule time (if still scheduled).
   - Delete tasks.
 - **TfL Line Disruptions**
-  - Fetches disruptions from [`https://api.tfl.gov.uk/Line/.../Disruption`](https://api.tfl.gov.uk/).
+  - Fetches disruptions from [`https://api.tfl.gov.uk/Line/*`](https://api.tfl.gov.uk/).
 - **Database**
-  - Defaults to SQLite (dev/tests).
-  - Supports PostgreSQL via `DATABASE_URL`.
+  - Defaults to SQLite (local env/dev/tests).
+  - Supports PostgreSQL via `DATABASE_URL` on docker.
 - **Scheduler**
   - Uses APScheduler for background jobs.
 - **Logging**
@@ -32,8 +32,7 @@ It demonstrates REST API design, background scheduling, database persistence, lo
 
 ### Create Task
 ```bash
-curl -X POST -H "Content-Type: application/json" \
-  -d '{"lines": "victoria"}' http://127.0.0.1:5555/tasks
+curl -X POST -H 'Content-Type: application/json' -d '{"scheduler_time" : "2021-11-12T17:00:00", "lines":"victoria"}' http://localhost:5555/tasks
 ```
 
 ### Create Task with Alias scheduler_time

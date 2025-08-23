@@ -23,6 +23,6 @@ RUN poetry install --no-interaction --no-ansi --only main --no-root
 COPY ./app ./app
 
 EXPOSE 5555
-CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5555"]
+# CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5555"]
 
-# CMD ["poetry", "run", "gunicorn", "-c", "gunicorn.conf.py", "app.main:app"]
+CMD ["poetry", "run", "gunicorn", "-c", "gunicorn.conf.py", "app.main:app"]
