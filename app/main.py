@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from fastapi import FastAPI
 
 from app.logging_config import configure_logging
@@ -23,10 +24,12 @@ app.include_router(router)
 def on_startup() -> None:
     """Initialize database and start the background scheduler."""
     init_db()
-    scheduler.start()
+    if os.getenv("DISABLE_SCHEDULER") != "1":
+        scheduler.start()
 
 
 @app.on_event("shutdown")
 def on_shutdown() -> None:
     """Gracefully shut down the background scheduler."""
-    scheduler.shutdown()
+    if os.getenv("DISABLE_SCHEDULER") != "1":
+        scheduler.shutdown()

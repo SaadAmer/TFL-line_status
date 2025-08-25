@@ -3,15 +3,8 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Any
 
-import pytest
-from fastapi.testclient import TestClient
 
-from app.main import app
-
-client = TestClient(app)
-
-
-def test_create_task_immediate() -> None:
+def test_create_task_immediate(client) -> None:
     """
     GIVEN a request to create a task without providing a schedule time
     WHEN the client posts a task with only the line "victoria"
@@ -26,7 +19,7 @@ def test_create_task_immediate() -> None:
     assert isinstance(data["id"], int)
 
 
-def test_create_task_with_alias_key_scheduler_time() -> None:
+def test_create_task_with_alias_key_scheduler_time(client) -> None:
     """
     GIVEN a request with the alias key `scheduler_time`
     WHEN the client posts a task with a valid future datetime and "central" line
@@ -41,7 +34,7 @@ def test_create_task_with_alias_key_scheduler_time() -> None:
     assert data["schedule_time"].startswith(run_at[:16])  # minute precision
 
 
-def test_create_task_invalid_line() -> None:
+def test_create_task_invalid_line(client) -> None:
     """
     GIVEN an invalid tube line identifier
     WHEN the client posts a task with "notaline"
@@ -53,7 +46,7 @@ def test_create_task_invalid_line() -> None:
     assert "Invalid line id" in resp.json()["detail"]
 
 
-def test_list_tasks() -> None:
+def test_list_tasks(client) -> None:
     """
     GIVEN existing tasks in the system
     WHEN the client requests the list of all tasks
@@ -64,7 +57,7 @@ def test_list_tasks() -> None:
     assert isinstance(resp.json(), list)
 
 
-def test_update_only_when_scheduled() -> None:
+def test_update_only_when_scheduled(client) -> None:
     """
     GIVEN a task that is still in 'scheduled' state
     WHEN the client sends a PATCH request to update its lines
@@ -84,7 +77,7 @@ def test_update_only_when_scheduled() -> None:
     assert patch.json()["lines"] == "victoria,central"
 
 
-def test_delete_task() -> None:
+def test_delete_task(client) -> None:
     """
     GIVEN a successfully created task
     WHEN the client deletes the task by ID
