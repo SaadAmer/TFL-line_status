@@ -3,6 +3,13 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Any
 
+import json
+import pytest
+
+from app.database import SessionLocal
+from app.scheduler import run_task
+from app import crud, models
+
 
 def test_create_task_immediate(client) -> None:
     """
@@ -31,7 +38,7 @@ def test_create_task_with_alias_key_scheduler_time(client) -> None:
     assert resp.status_code == 201, resp.text
     data = resp.json()
     assert data["lines"] == "central"
-    assert data["schedule_time"].startswith(run_at[:16])  # minute precision
+    assert data["schedule_time"].startswith(run_at[:16])
 
 
 def test_create_task_invalid_line(client) -> None:
@@ -93,3 +100,25 @@ def test_delete_task(client) -> None:
 
     get_resp = client.get(f"/tasks/{task_id}")
     assert get_resp.status_code == 404
+
+
+def test_task_status_transitions_when_job_runs(client, monkeypatch) -> None:
+    """
+    GIVEN a scheduled task
+    WHEN the scheduler's job runner is invoked
+    THEN the task moves to 'completed' and result is populated.
+    """
+    from app import tfl_client
+    monkeypatch.setattr(tfl_client, "fetch_disruptions", lambda lines: json.dumps([{"ok": True, "lines": lines}]))
+
+    resp = client.post("/tasks", json={"lines": "victoria"})
+    assert resp.status_code == 201
+    task_id = resp.json()["id"]
+
+    run_task(task_id)
+
+    check = client.get(f"/tasks/{task_id}")
+    assert check.status_code == 200
+    data: dict[str, Any] = check.json()
+    assert data["status"] == "completed"
+    assert data["result"]
