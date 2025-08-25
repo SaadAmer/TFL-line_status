@@ -72,9 +72,10 @@ curl -X DELETE http://127.0.0.1:5555/tasks/<id>
 
 ## Local Development
 
+You will need poetry to install these dependenices if you're running them locally.
+
 ### Install dependencies
 
-You will need poetry to install these dependenices if you're running them locally.
 
 ```bash
 poetry install
@@ -89,7 +90,7 @@ poetry run uvicorn app.main:app --reload --host 127.0.0.1 --port 5555
 ### Run Tests
 
 ```bash
-pytest -q
+poetry run pytest -q
 ```
 
 ### Running with Docker (I used docker version 28.3.3)
