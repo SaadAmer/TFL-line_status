@@ -58,9 +58,7 @@ curl http://127.0.0.1:5555/tasks/<id>
 ### Update Task
 
 ```bash
-curl -X PATCH -H "Content-Type: application/json" \
-  -d '{"lines": "victoria,central"}' \
-  http://127.0.0.1:5555/tasks/<id>
+curl -X PATCH -H 'Content-Type: application/json' -d '{"scheduler_time" : "2021-11-12T17:00:00"}' http://localhost:5555/tasks/<id>
 ```
 
 ### Delete Task
