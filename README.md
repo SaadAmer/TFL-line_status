@@ -74,6 +74,7 @@ curl -X DELETE http://127.0.0.1:5555/tasks/<id>
 
 ### Install dependencies
 
+You will need poetry to install these dependenices if you're running them locally.
 
 ```bash
 poetry install
