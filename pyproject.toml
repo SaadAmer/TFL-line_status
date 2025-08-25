@@ -27,10 +27,7 @@ pythonpath = ["."]
 testpaths = ["tests"]
 
 [tool.poetry.scripts]
-# convenient launcher: `poetry run wovenlight`
 wovenlight = "uvicorn:main"
-# Note: we want to call uvicorn with module: `app.main:app`. Poetry scripts don't pass args here,
-# so prefer the CLI shown below. Keeping script for completeness.
 
 [build-system]
 requires = ["poetry-core"]
