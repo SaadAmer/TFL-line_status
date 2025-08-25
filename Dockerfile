@@ -9,17 +9,14 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 RUN apt-get update && apt-get install -y --no-install-recommends tzdata curl && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Poetry
 RUN curl -sSL https://install.python-poetry.org | python3 - && \
     ln -s /root/.local/bin/poetry /usr/local/bin/poetry
 
 WORKDIR /app
 
-# Better layer caching: lock/metadata first
 COPY pyproject.toml poetry.lock* ./
 RUN poetry install --no-interaction --no-ansi --only main --no-root
 
-# Copy source
 COPY ./app ./app
 
 EXPOSE 5555
